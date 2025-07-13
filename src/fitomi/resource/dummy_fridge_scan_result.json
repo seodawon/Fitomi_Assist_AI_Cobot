@@ -1,0 +1,37 @@
+[
+  {
+    "name": "사과",
+    "calories": "52kcal",
+    "protein": "0.26g",
+    "fat": "0.17g",
+    "carbohydrates": "13.81g"
+  },
+  {
+    "name": "바나나",
+    "calories": "89kcal",
+    "protein": "1.09g",
+    "fat": "0.33g",
+    "carbohydrates": "22.84g"
+  },
+  {
+    "name": "견과류",
+    "calories": "579kcal",
+    "protein": "21.15g",
+    "fat": "49.93g",
+    "carbohydrates": "21.55g"
+  },
+  {
+    "name": "골뱅이",
+    "calories": "70kcal",
+    "protein": "10g",
+    "fat": "0g",
+    "carbohydrates": "8g"
+  },
+  {
+    "name": "밥",
+    "calories": "143kcal",
+    "protein": "2.72g",
+    "fat": "0.48g",
+    "carbohydrates": "31.02g"
+  }
+]

@@ -1,0 +1,7 @@
+# Request
+string[] request
+
+---
+# Response
+bool answer
+string[] message

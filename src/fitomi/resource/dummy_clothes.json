@@ -1,0 +1,7 @@
+[
+    {"type": "반팔", "src": "/home/rokey/choi_ws/src/fitomi/resource/t-shirts.jpg"},
+    {"type": "반바지", "src": "/home/rokey/choi_ws/src/fitomi/resource/shorts.jpg"},
+    {"type": "바람막이", "src": "/home/rokey/choi_ws/src/fitomi/resource/windbreaker.jpg"},
+    {"type": "긴바지", "src": "/home/rokey/choi_ws/src/fitomi/resource/pants.jpg"},
+    {"type": "가디건", "src": "/home/rokey/choi_ws/src/fitomi/resource/cardigan.jpg"}
+]

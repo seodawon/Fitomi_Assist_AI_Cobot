@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Registration</title>
+    <script>
+        window.onload = function() {
+            let confirmRegister = confirm("이 ID는 등록되어 있지 않습니다.\n새 계정으로 등록하시겠습니까?");
+            if (confirmRegister) {
+                // POST로 서버에 등록 요청
+                fetch("/register", {
+                    method: "POST",
+                    headers: {  
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        id: "{{ id }}",
+                        password: "{{ password }}"
+                    })
+                })
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                });
+            } else {
+                window.location.href = "/";
+            }
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

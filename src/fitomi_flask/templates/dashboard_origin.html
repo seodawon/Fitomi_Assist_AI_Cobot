@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fitomi Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      background-color: #88e0cc;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr 0.8fr;
+      grid-template-rows: 2fr 1fr;
+      gap: 15px;
+      padding: 20px;
+      height: calc(100vh - 60px);
+      box-sizing: border-box;
+    }
+    .panel {
+      background-color: rgba(255, 255, 255, 0.4);
+      border-radius: 15px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .panel img.label {
+      height: 40px;
+      margin-bottom: 10px;
+    }
+    .video, .upload-preview, .recommend-preview {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+    #log_box {
+      background-color: #1e1e1e;
+      color: #00FF7F;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      width: 100%;
+      height: 90%;
+      padding: 10px;
+      border-radius: 10px;
+      resize: none;
+      box-sizing: border-box;
+    }
+    .btn {
+      margin-top: 10px;
+      padding: 8px 20px;
+      background-color: #2a9d8f;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .header {
+      text-align: center;
+      padding: 10px;
+      font-size: 24px;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">fitomi</div>
+
+  <div class="grid-container">
+    <!-- Video Feed -->
+    <div class="panel">
+      <img class="label" src="{{ url_for('static', filename='video.png') }}">
+      <img class="video" src="{{ url_for('video_feed') }}" alt="YOLO feed">
+    </div>
+
+    <!-- Manual -->
+    <div class="panel">
+      <img class="label" src="{{ url_for('static', filename='manual.png') }}">
+      <p style="text-align:left">
+        실시간 영상 확인 후 원하는 옷 이미지를 업로드하세요.<br>
+        옷 추천 결과는 하단에 표시됩니다.<br>
+        로그는 우측에 자동 출력되며 저장도 가능합니다.
+      </p>
+    </div>
+
+    <!-- Log Panel -->
+    <div class="panel" style="grid-row: span 2;">
+      <img class="label" src="{{ url_for('static', filename='log.png') }}">
+      <textarea id="log_box" readonly></textarea>
+      <button class="btn" onclick="saveLogs()">로그 저장</button>
+    </div>
+
+    <!-- Upload Panel -->
+    <div class="panel">
+      <img class="label" src="{{ url_for('static', filename='wanted_cloth.png') }}">
+
+      <!-- 숨겨진 기본 파일 선택기 -->
+      <input type="file" id="upload_img" accept="image/*" style="display: none;" onchange="previewImage(this)">
+
+      <!-- 사용자 정의 버튼 -->
+      <button class="btn" onclick="document.getElementById('upload_img').click()">이미지 선택</button>
+
+      <img id="uploaded_preview" class="upload-preview" src="{{ url_for('static', filename='unavailable.jpg') }}">
+    </div>
+
+    <!-- Recommendation Panel -->
+    <div class="panel">
+      <img class="label" src="{{ url_for('static', filename='select_cloth.png') }}">
+      <img id="recommended_img_1" class="recommend-preview" src="{{ url_for('static', filename='unavailable.jpg') }}">
+      <img id="recommended_img_2" class="recommend-preview" src="{{ url_for('static', filename='unavailable.jpg') }}">
+      <button class="btn" onclick="loadRecommended()">추천 이미지 보기</button>
+    </div>
+  </div>
+
+  <script>
+    function loadRecommended() {
+      fetch('/get_recommended_image')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('recommended_img_1').src = "data:image/jpeg;base64," + data.img;
+          document.getElementById('recommended_img_2').src = "data:image/jpeg;base64," + data.img; // 동일 이미지 예시
+        });
+    }
+
+    function previewImage(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById('uploaded_preview').src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function fetchLogs() {
+      fetch('/get_logs')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('log_box').value = data.logs.join("\n");
+        });
+    }
+
+    function saveLogs() {
+      fetch('/save_logs', { method: 'POST' })
+        .then(res => res.json())
+        .then(() => alert("로그 저장 완료"));
+    }
+
+    setInterval(fetchLogs, 2000);
+  </script>
+</body>
+</html>

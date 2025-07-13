@@ -1,0 +1,12 @@
+# Goal
+string keyword_type	# 냉장고 or 옷장
+string[] keyword 	# ex) [], ['사과'], ['반팔', '반바지'], ...
+
+---
+# Result
+bool success		# 0: fail, 1: success
+string[] scan_list	# ex) 냉장고 스캔된 항목
+
+---
+# Feedback
+string message		# 동작에 대한 설명

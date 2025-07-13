@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fitomi Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      background-color: #88e0cc;
+    }
+
+    .header {
+      text-align: center;
+      padding: 10px;
+      font-size: 24px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr 1.2fr;
+      height: calc(100vh - 60px);
+      gap: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .panel {
+      background-color: rgba(255, 255, 255, 0.4);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .panel img.label {
+      height: 30px;
+      margin-bottom: 8px;
+    }
+
+    .video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .upload-preview, .recommend-preview {
+      width: 100%;
+      max-height: 140px;
+      object-fit: contain;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* #log_box {
+      background-color: #1e1e1e;
+      color: #00FF7F;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      width: 100%;
+      height: 140px;
+      padding: 8px;
+      border-radius: 10px;
+      resize: none;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    } */
+
+    #log_box {
+  background-color: #1e1e1e;
+  color: #00FF7F;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  width: 100%;
+  height: 240px !important;
+  padding: 8px;
+  border-radius: 10px;
+  resize: none;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+
+    .btn {
+      padding: 6px 16px;
+      background-color: #2a9d8f;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .log-container {
+      width: 100%;
+    }
+
+    /* .manual-text {
+      font-size: 14px;
+      text-align: left;
+      max-height: 300px;
+      overflow-y: auto;
+    } */
+
+
+    .manual-text {
+  font-size: 14px;
+  text-align: left;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 2px solid white;        /* 테두리 추가 */
+  border-radius: 10px;            /* 둥글게  */
+  padding: 10px;                  /* 안쪽 여백 추가 */
+}
+
+  </style>
+</head>
+<body>
+  <div class="header">fitomi
+    <a href="/logout" style="
+    float: right;
+  background-color: #2a9d8f;
+  padding: 6px 12px;
+  border-radius: 15px;
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+  margin-right: 20px;">
+    로그아웃
+  </a>
+  </div>
+
+  <div class="grid-container">
+    <!-- 영상 스트림 패널 -->
+    <div class="panel">
+      <img class="label" src="{{ url_for('static', filename='video.png') }}"style="width: 150px; height: auto;">
+      <img class="video" src="{{ url_for('video_feed') }}">
+    </div>
+
+    <!-- 이미지 업로드 + 추천 이미지 패널 -->
+    <div class="panel">
+      <img class="label" src="{{ url_for('static', filename='image.png') }}"style="width: 150px; height: auto;">
+      <img id="uploaded_preview" class="upload-preview" src="{{ url_for('static', filename='Loading.png') }}">
+      <input type="file" id="upload_img" accept="image/*" style="display: none;" onchange="previewImage(this)">
+      <button class="btn" onclick="document.getElementById('upload_img').click()">이미지 선택</button>
+
+      <img class="label" src="{{ url_for('static', filename='recommend.png') }}" style="width: 150px; height: auto;">
+      <img id="recommended_img_1" class="recommend-preview" src="{{ url_for('static', filename='waiting.png') }}">
+      <img id="recommended_img_2" class="recommend-preview" src="{{ url_for('static', filename='for_ros2.png') }}">
+      <!-- 추천 이미지 보기 버튼 제거됨 -->
+    </div>
+
+    <!-- 메뉴얼 + 로그 패널 -->
+    <div class="panel">
+      <div class="manual-text">
+        <img class="label" src="{{ url_for('static', filename='manual.png') }}"style="width: 150px; height: auto;">
+        <p>
+          영상을 보면서 입고싶은 옷이나 음식을 선택해보세요.<br><br>
+          
+          - 시나리오1<br>
+          1. 원하는 음식이 있으면 요청해 주세요! 음식을 갖다 줄거에요.<br>
+          2. 본인이 먹었던 음식 말해주세요. 영양소 기반으로 음식 추천해줄거에요.<br><br>
+
+          - 시나리오2<br>
+          1. 입고싶은 옷을 업로드 해주세요. 옷을 추천해줄거에요.<br>
+          2. 뭘 입을지 모르면 말씀하세요. 날씨에 맞는 옷을 추천해줄거에요.<br><br>
+
+          로그는 아래에서 자동 출력되며 저장도 가능합니다.<br>
+          이 시스템은 YOLOv8 기반 감지를 사용하며<br>
+          업로드한 이미지와 가장 유사한 옷을 제안합니다.<br>
+          로그는 2초마다 자동 갱신되며 서버 측에 저장할 수 있습니다.<br>
+        </p>
+      </div>
+      <div class="log-container">
+        <img class="label" src="{{ url_for('static', filename='log.png') }}"style="width: 150px; height: auto;">
+        <textarea id="log_box" readonly></textarea>
+        <button class="btn" onclick="saveLogs()" style="margin-left: auto; margin-top: 8px; padding: 6px 20px;">로그 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const keywordMap = {
+    '반팔': 'printed_tee.jpg',
+    '반바지': 'gray_shorts.jpg',
+    '긴바지': 'checked_pants.jpg',
+    '가디건': 'brown_jacket.jpg',
+    '바람막이': 'white_jacket.jpg',
+    '사과': 'apple.jpg',
+    '바나나': 'banana.jpg',
+    '견과류': 'almond.jpg',
+    '골뱅이': 'whelk.jpg', 
+    '밥': 'rice.jpg'
+  };
+
+    function previewImage(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById('uploaded_preview').src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+
+        const formData = new FormData();
+        formData.append("image", input.files[0]);
+
+        fetch("/upload_image", {
+          method: "POST",
+          body: formData
+        });
+      }
+    }
+
+    function fetchLogs() {
+      fetch('/get_logs')
+      .then(res => res.json())
+      .then(data => {
+      const logs = data.logs;
+      document.getElementById('log_box').value = logs.join("\n");
+
+      const latestLog = logs[logs.length - 1] || '';
+      const foundKeywords = [];
+      
+      const fullLogText = logs.join(" ");
+      const conditionMatched = fullLogText.includes("영양소") ||
+                               fullLogText.includes("가져오겠습니다") ||
+                               fullLogText.includes("날씨");
+
+      if (conditionMatched) {
+        for (const keyword in keywordMap) {
+          if (latestLog.includes(keyword)) {
+            foundKeywords.push(keyword);
+          }
+        }
+      }
+
+      if (foundKeywords.length >= 2) {
+        document.getElementById("recommended_img_1").src = "/static/" + keywordMap[foundKeywords[1]];
+        document.getElementById("recommended_img_2").src = "/static/" + keywordMap[foundKeywords[0]];
+      } 
+      else if(foundKeywords.length >= 1)  {
+        document.getElementById("recommended_img_1").src = "/static/" + keywordMap[foundKeywords[0]];
+        document.getElementById("recommended_img_2").src = "/static/waiting.png";
+      }
+      else {
+        document.getElementById("recommended_img_1").src = "/static/waiting.png";
+        document.getElementById("recommended_img_2").src = "/static/for_ros2.png";
+      }
+    });
+}
+    function saveLogs() {
+      fetch('/save_logs', { method: 'POST' })
+        .then(res => res.json())
+        .then(() => alert("로그 저장 완료"));
+    }
+
+    setInterval(fetchLogs, 2000);
+
+    // 추천 이미지 자동 업데이트 (선택적 구현)
+    // setInterval(() => {
+    //   fetch("/get_recommended_image")
+    //     .then(res => res.json())
+    //     .then(data => {
+    //       const imgSrc = "data:image/jpeg;base64," + data.img;
+    //       document.getElementById("recommended_img_1").src = imgSrc;
+    //       document.getElementById("recommended_img_2").src = imgSrc;
+    //     });
+    // }, 2000);
+
+    window.addEventListener("beforeunload", function () {
+      navigator.sendBeacon("/clear_logs_on_exit");
+    });
+  </script>
+</body>
+</html>

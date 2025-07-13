@@ -1,0 +1,6 @@
+[
+  {"start_temp": 0, "end_temp": 10, "weather": "흐림", "recommend": "두꺼운 패딩, 목도리"},
+  {"start_temp": 11, "end_temp": 17, "weather": "흐림", "recommend": "니트 + 바람막이"},
+  {"start_temp": 18, "end_temp": 25, "weather": "맑음", "recommend": "긴팔 셔츠 또는 얇은 가디건"},
+  {"start_temp": 26, "end_temp": 35, "weather": "맑음", "recommend": "반팔 티셔츠, 반바지"}
+]

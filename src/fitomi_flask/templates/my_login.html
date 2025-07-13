@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fitomi Login</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap');
+
+    body {
+      margin: 0;
+      background-color: #88e0cc;
+      font-family: 'Nunito', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 60px;
+      color: white;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+      width: 260px;
+      padding: 12px 20px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 30px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .login-form input[type="submit"] {
+      width: 300px;
+      padding: 14px;
+      margin-top: 20px;
+      background-color: #2a9d8f;
+      border: none;
+      border-radius: 30px;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-form input[type="submit"]:hover {
+      background-color: #21867a;
+    }
+  </style>
+</head>
+<body>
+  <form action="/" method="POST">
+    <div class="login-container">
+      <div class="logo">fitomi</div>
+      <div class="login-form">
+        <input list="userlist" type="text" name="id" id="id" placeholder="User ID" required>
+        <datalist id="userlist">
+          {% for user in user_list %}
+            <option value="{{ user }}">
+          {% endfor %}
+        </datalist>
+
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Login">
+      </div>
+    </div>
+  </form>
+</body>
+</html>
