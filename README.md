@@ -7,7 +7,7 @@
 <br>
 
 ## 🎥 프로젝트 소개
-[![Video Label](http://img.youtube.com/vi/EtdsOFZ8_Z0/0.jpg)](https://youtu.be/EtdsOFZ8_Z0)
+[![Video Label](https://youtu.be/7lKyawi-X6o/0.jpg)](https://youtu.be/7lKyawi-X6o)
   ➡ 영상 클릭 시, youtube 재생
 
 
